@@ -5,11 +5,19 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using gRpc.Vs.WebApi.Logic;
 using GrpcData;
+using Microsoft.Extensions.Logging;
 
 namespace gRpc.Vs.WebApi.GrpcServer.Services
 {
     public class DataService : GrpcDataService.GrpcDataServiceBase
     {
+        //private readonly ILogger<DataService> _logger;
+
+        //public DataService(ILogger<DataService> logger)
+        //{
+        //    _logger = logger;
+        //}
+
         public override async Task<DataResponse> GetData(GetDataRequest request, ServerCallContext context)
         {
             var result = new List<DataProto>(4000);
@@ -49,6 +57,7 @@ namespace gRpc.Vs.WebApi.GrpcServer.Services
                 {
                     await responseStream.WriteAsync(new DataResponse { Data = { result } });
                     result.Clear();
+                    //_logger.LogInformation(">>>> chunk was sent");
                 }
             }
         }
