@@ -1,0 +1,36 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcData";
+
+service GrpcDataService {
+	rpc GetData (GetDataRequest) returns (DataResponse);
+	rpc GetDataStream (GetDataRequest) returns (stream DataResponse);
+}
+
+message GetDataRequest {
+	int32 pageSize = 1;
+	int32 pages = 2;
+}
+
+message DataResponse {
+	repeated DataProto data = 1;
+}
+
+message DataProto {
+	int32 id = 1;
+	string name = 2;
+	bool isActive = 3;
+	Status status = 4;
+	repeated Argument arguments = 5;
+}
+
+enum Status {
+	NONE = 0;
+	ACTIVE = 1;
+	INACTIVE = 2;
+}
+
+message Argument {
+	int32 first = 1;
+	string second = 2;
+}
