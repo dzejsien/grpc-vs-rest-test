@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\gRpc.Vs.WebApi.Logic\gRpc.Vs.WebApi.Logic.csproj" />
   </ItemGroup>
 

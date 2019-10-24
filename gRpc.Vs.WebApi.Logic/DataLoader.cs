@@ -2,12 +2,13 @@
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace gRpc.Vs.WebApi.Logic
 {
     public class DataLoader
     {
-        public static async IAsyncEnumerable<Data> GetData()
+        public static async IAsyncEnumerable<Data> GetDataOld()
         {
             await using var stream = File.OpenRead("./MOCK_DATA1.json");
             using (var data = await JsonDocument.ParseAsync(stream))
@@ -23,8 +24,24 @@ namespace gRpc.Vs.WebApi.Logic
                     yield return JsonSerializer.Deserialize<Data>(jsonElement.GetRawText(), opt);
             }
         }
+
+        public static async IAsyncEnumerable<Data> GetData()
+        {
+            await using var stream = File.OpenRead("MOCK_DATA1.json");
+
+            var opt = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                Converters = { new JsonStringEnumConverter(), new ArgumentConverter() }
+            };
+
+            var list = await JsonSerializer.DeserializeAsync<IList<Data>>(stream, opt);
+
+            foreach (var elem in list)
+                yield return elem;
+        }
     }
 
-    
+
 }
 
