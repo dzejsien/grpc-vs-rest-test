@@ -28,6 +28,13 @@ namespace gRpc.Vs.WebApi.Host
        |  SyncDeserialize | 31.46 ms | 0.4354 ms | 0.4073 ms |    1 | 2000.0000 | 750.0000 | 500.0000 |   3.25 KB |
        | AsyncDeserialize | 31.95 ms | 0.7008 ms | 1.9766 ms |    1 |  687.5000 | 312.5000 |  31.2500 |  14.53 KB |
      *
+     *
+     * fixed options - to prevent allocations
+     *
+     * |           Method |     Mean |     Error |    StdDev | Rank |     Gen 0 |    Gen 1 |    Gen 2 | Allocated |
+       |----------------- |---------:|----------:|----------:|-----:|----------:|---------:|---------:|----------:|
+       |  SyncDeserialize | 29.24 ms | 0.5523 ms | 0.5166 ms |    2 | 1781.2500 | 500.0000 | 281.2500 |   3.24 KB |
+       | AsyncDeserialize | 26.67 ms | 0.4331 ms | 0.4051 ms |    1 |  687.5000 | 281.2500 |        - |   3.24 KB |
      */
 
     class Program
