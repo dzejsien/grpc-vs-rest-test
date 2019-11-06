@@ -12,6 +12,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  version: 1.0.0
 
 steps:
 - task: DotNetCoreCLI@2
@@ -31,4 +32,13 @@ steps:
     PathtoPublish: 'out'
     ArtifactName: 'gateway'
     publishLocation: 'Container'
+
+- script: dotnet pack /p:PackageVersion=$(version)
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    nuGetFeedType: external
+    publishFeedCredentials: 'dzejsienGithub'
+    versioningScheme: byEnvVar
+    versionEnvVar: version
 
