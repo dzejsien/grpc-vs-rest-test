@@ -25,6 +25,7 @@ steps:
     command: 'publish'
     projects: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj'
     publishWebProjects: false
+    zipAfterPublish: false
     arguments: '-c $(BuildConfiguration) -o out'
 - task: NuGetCommand@2
   inputs:
