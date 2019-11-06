@@ -35,6 +35,7 @@ steps:
     nobuild: true
     includesymbols: true
     versioningScheme: 'off'
+- task: NuGetAuthenticate@0
 - task: NuGetCommand@2
   inputs:
     command: 'push'
