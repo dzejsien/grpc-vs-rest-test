@@ -27,16 +27,14 @@ steps:
     publishWebProjects: false
     zipAfterPublish: false
     arguments: '-c $(BuildConfiguration) -o out'
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
     packagesToPack: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj'
-    packDestination: out
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
-    includeSymbols: true
+    packDirectory: 'out'
+    nobuild: true
+    includesymbols: true
+    versioningScheme: 'off'
 - task: NuGetCommand@2
   inputs:
     command: 'push'
