@@ -17,7 +17,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: '/gRpc.Vs.WebApi.Gateway/*.csproj'
+    projects: './gRpc.Vs.WebApi.Gateway/*.csproj'
   displayName: 'dotnet build $(buildConfiguration)'
 - task: DotNetCoreCLI@2
   inputs:
