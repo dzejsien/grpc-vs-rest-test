@@ -26,11 +26,16 @@ steps:
     projects: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj'
     publishWebProjects: false
     arguments: '-c $(BuildConfiguration) -o out'
-
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: 'out/**/*.nupkg;!out/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'd4d86f1e-60c1-4453-b712-9d05fcc2a0c5'
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: 'out'
     ArtifactName: 'gateway'
     publishLocation: 'Container'
-- task: NuGetAuthenticate@0
+
 
