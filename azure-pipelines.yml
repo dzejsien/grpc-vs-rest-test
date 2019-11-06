@@ -24,10 +24,10 @@ steps:
     command: 'publish'
     projects: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj'
     publishWebProjects: false
-    arguments: '-c $(BuildConfiguration) -o gateway'
+    arguments: '-c $(BuildConfiguration) -o $(build.artifactstagingdirectory)/gateway'
 - task: PublishBuildArtifacts@1
   inputs:
-    TargetPath: gateway
+    TargetPath: $(build.artifactstagingdirectory)/gateway
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'gateway'
     publishLocation: 'Container'
