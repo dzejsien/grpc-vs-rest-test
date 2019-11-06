@@ -29,6 +29,16 @@ steps:
     arguments: '-c $(BuildConfiguration) -o out'
 - task: NuGetCommand@2
   inputs:
+    command: 'pack'
+    packagesToPack: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj'
+    packDestination: out
+    versioningScheme: 'byPrereleaseNumber'
+    majorVersion: '1'
+    minorVersion: '0'
+    patchVersion: '0'
+    includeSymbols: true
+- task: NuGetCommand@2
+  inputs:
     command: 'push'
     packagesToPush: 'out/**/*.nupkg;!out/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
