@@ -14,11 +14,21 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '/gRpc.Vs.WebApi.Gateway/*.csproj'
   displayName: 'dotnet build $(buildConfiguration)'
-
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    projects: '/gRpc.Vs.WebApi.Gateway/*.csproj'
+    publishWebProjects: true
+    arguments: '-c $(BuildConfiguration) -o gateway'
 - task: PublishBuildArtifacts@1
   inputs:
+    TargetPath: ./gateway
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
+    ArtifactName: 'gateway'
     publishLocation: 'Container'
+
