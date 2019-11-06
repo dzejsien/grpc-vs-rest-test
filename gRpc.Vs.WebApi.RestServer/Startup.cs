@@ -18,6 +18,7 @@ namespace gRpc.Vs.WebApi.RestServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCompression();
             services.AddControllers();
         }
 
@@ -29,7 +30,8 @@ namespace gRpc.Vs.WebApi.RestServer
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseResponseCompression();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
