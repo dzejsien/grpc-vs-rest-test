@@ -32,8 +32,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    packagesToPack: '**/*.csproj'
-    publishWebProjects: true
+    packagesToPack: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj;gRpc.Vs.WebApi.GrpcServer/gRpc.Vs.WebApi.GrpcServer.csproj;gRpc.Vs.WebApi.RestServer/gRpc.Vs.WebApi.RestServer.csproj'
     packDirectory: 'out'
     nobuild: true
     includesymbols: true
