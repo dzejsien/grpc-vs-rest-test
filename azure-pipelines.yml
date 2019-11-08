@@ -12,29 +12,32 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  version: 1.0.0
 
+name: $(BuildDefinitionName)_$(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)
 steps:
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj'
-  displayName: 'dotnet build $(buildConfiguration)'
+# its not needed - publish will do the build
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'build'
+#     projects: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj'
+#   displayName: 'dotnet build $(buildConfiguration)'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
-    projects: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj'
-    publishWebProjects: false
-    zipAfterPublish: false
+    projects: '**/*.csproj'
+    publishWebProjects: true
+    zipAfterPublish: true
     arguments: '-c $(BuildConfiguration) -o out'
+# it is not needed for release pipline - it use ziped file, but still
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    packagesToPack: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj'
+    packagesToPack: 'gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj;gRpc.Vs.WebApi.GrpcServer/gRpc.Vs.WebApi.GrpcServer.csproj;gRpc.Vs.WebApi.RestServer/gRpc.Vs.WebApi.RestServer.csproj'
     packDirectory: 'out'
     nobuild: true
     includesymbols: true
-    versioningScheme: 'off'
+    versioningScheme: 'byBuildNumber'
+# - task: NuGetAuthenticate@0
 - task: NuGetCommand@2
   inputs:
     command: 'push'
@@ -44,7 +47,8 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: 'out'
-    ArtifactName: 'gateway'
+    ArtifactName: 'drop'
     publishLocation: 'Container'
+
 
 
