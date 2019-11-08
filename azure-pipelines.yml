@@ -44,7 +44,7 @@ steps:
     publishVstsFeed: 'd4d86f1e-60c1-4453-b712-9d05fcc2a0c5'
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: 'out'
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
