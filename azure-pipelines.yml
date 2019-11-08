@@ -27,11 +27,6 @@ steps:
     publishWebProjects: false
     zipAfterPublish: true
     arguments: '-c $(BuildConfiguration) -o out'
-# - task: PublishBuildArtifacts@1
-#   inputs:
-#     PathtoPublish: 'out'
-#     ArtifactName: 'gateway'
-#     publishLocation: 'Container'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
@@ -47,6 +42,11 @@ steps:
     packagesToPush: 'out/**/*.nupkg;!out/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: 'd4d86f1e-60c1-4453-b712-9d05fcc2a0c5'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 
 
 
