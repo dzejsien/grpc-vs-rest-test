@@ -26,6 +26,7 @@ namespace gRpc.Vs.WebApi.Gateway
                         if (string.IsNullOrEmpty(settings.SourceName))
                         {
                             settings.SourceName = hostContext.HostingEnvironment.ApplicationName;
+                            settings.LogName = hostContext.HostingEnvironment.ApplicationName;
                         }
                     });
                 });
