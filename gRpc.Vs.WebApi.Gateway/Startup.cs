@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.EventLog;
 
 namespace gRpc.Vs.WebApi.Gateway
 {
@@ -47,8 +48,8 @@ namespace gRpc.Vs.WebApi.Gateway
         // logger can be used only here from core 3.0 https://stackoverflow.com/questions/41287648/how-do-i-write-logs-from-within-startup-cs
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            logger.LogInformation(_urls.GrpcServer);
-            logger.LogInformation(_urls.RestServer);
+            logger.LogWarning(_urls.GrpcServer);
+            logger.LogWarning(_urls.RestServer);
 
             if (env.IsDevelopment())
             {

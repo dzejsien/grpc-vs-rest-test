@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.EventLog;
 
 namespace gRpc.Vs.WebApi.Gateway
 {
@@ -13,10 +14,21 @@ namespace gRpc.Vs.WebApi.Gateway
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(l => l.AddConsole())
-                .ConfigureWebHostDefaults(webBuilder =>
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
+                // its not needed, if not set event log will show source as .net runtime - warning will be logged automatically (if you want to add Info - need to change appsettings
+                /*
+                 * https://github.com/aspnet/Extensions/issues/1839
+                 */
+                .ConfigureServices((hostContext, services) =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    services.Configure<EventLogSettings>(settings =>
+                    {
+                        if (string.IsNullOrEmpty(settings.SourceName))
+                        {
+                            settings.SourceName = hostContext.HostingEnvironment.ApplicationName;
+                        }
+                    });
                 });
+
     }
 }
