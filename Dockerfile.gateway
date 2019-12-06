@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
+
+COPY /gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj ./gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj
+COPY /gRpc.Vs.WebApi.GrpcClient/gRpc.Vs.WebApi.GrpcClient.csproj ./gRpc.Vs.WebApi.GrpcClient/gRpc.Vs.WebApi.GrpcClient.csproj
+COPY /gRpc.Vs.WebApi.RestClient/gRpc.Vs.WebApi.RestClient.csproj ./gRpc.Vs.WebApi.RestClient/gRpc.Vs.WebApi.RestClient.csproj
+
+RUN dotnet restore ./gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj
+
+COPY . .
+
+RUN dotnet publish ./gRpc.Vs.WebApi.Gateway/gRpc.Vs.WebApi.Gateway.csproj -c Release --no-restore -o publish-build
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
+WORKDIR /publish-runtime
+
+COPY --from=build /publish-build .
+
+COPY grpc.crt /usr/local/share/ca-certificates/grpc.crt
+RUN chmod 644 /usr/local/share/ca-certificates/grpc.crt && update-ca-certificates
+
+ENTRYPOINT ["dotnet","gRpc.Vs.WebApi.Gateway.dll"]

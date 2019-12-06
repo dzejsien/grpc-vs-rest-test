@@ -7,15 +7,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gRpc.Vs.WebApi.Logic", "gRp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gRpc.Vs.WebApi.Host", "gRpc.Vs.WebApi.Host\gRpc.Vs.WebApi.Host.csproj", "{E8A0F453-B36A-494C-966B-90D568C4A76B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRpc.Vs.WebApi.GrpcServer", "gRpc.Vs.WebApi.GrpcServer\gRpc.Vs.WebApi.GrpcServer.csproj", "{5502D45E-C892-4440-BCB1-54E85EF8319F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gRpc.Vs.WebApi.GrpcServer", "gRpc.Vs.WebApi.GrpcServer\gRpc.Vs.WebApi.GrpcServer.csproj", "{5502D45E-C892-4440-BCB1-54E85EF8319F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRpc.Vs.WebApi.GrpcClient", "gRpc.Vs.WebApi.GrpcClient\gRpc.Vs.WebApi.GrpcClient.csproj", "{F5D4A3BE-13CB-4882-9F85-04352C64C024}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gRpc.Vs.WebApi.GrpcClient", "gRpc.Vs.WebApi.GrpcClient\gRpc.Vs.WebApi.GrpcClient.csproj", "{F5D4A3BE-13CB-4882-9F85-04352C64C024}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRpc.Vs.WebApi.Gateway", "gRpc.Vs.WebApi.Gateway\gRpc.Vs.WebApi.Gateway.csproj", "{33A0F7A1-B99E-49B4-B544-6CE3A25C9046}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gRpc.Vs.WebApi.Gateway", "gRpc.Vs.WebApi.Gateway\gRpc.Vs.WebApi.Gateway.csproj", "{33A0F7A1-B99E-49B4-B544-6CE3A25C9046}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRpc.Vs.WebApi.RestServer", "gRpc.Vs.WebApi.RestServer\gRpc.Vs.WebApi.RestServer.csproj", "{0BDF6661-7825-46B7-AAF9-944B1D56A510}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gRpc.Vs.WebApi.RestServer", "gRpc.Vs.WebApi.RestServer\gRpc.Vs.WebApi.RestServer.csproj", "{0BDF6661-7825-46B7-AAF9-944B1D56A510}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRpc.Vs.WebApi.RestClient", "gRpc.Vs.WebApi.RestClient\gRpc.Vs.WebApi.RestClient.csproj", "{C135823C-62A5-4FF6-9BC1-09F96F2C6054}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gRpc.Vs.WebApi.RestClient", "gRpc.Vs.WebApi.RestClient\gRpc.Vs.WebApi.RestClient.csproj", "{C135823C-62A5-4FF6-9BC1-09F96F2C6054}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{36D698E3-0150-45AC-9CC2-82B46D501005}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile.gateway = Dockerfile.gateway
+		Dockerfile.grpc-server = Dockerfile.grpc-server
+		Dockerfile.rest-server = Dockerfile.rest-server
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
+
+COPY /gRpc.Vs.WebApi.RestServer/gRpc.Vs.WebApi.RestServer.csproj ./gRpc.Vs.WebApi.RestServer/gRpc.Vs.WebApi.RestServer.csproj
+COPY /gRpc.Vs.WebApi.Logic/gRpc.Vs.WebApi.Logic.csproj ./gRpc.Vs.WebApi.Logic/gRpc.Vs.WebApi.Logic.csproj
+COPY /gRpc.Vs.WebApi.RestClient/gRpc.Vs.WebApi.RestClient.csproj ./gRpc.Vs.WebApi.RestClient/gRpc.Vs.WebApi.RestClient.csproj
+
+RUN dotnet restore ./gRpc.Vs.WebApi.RestServer/gRpc.Vs.WebApi.RestServer.csproj
+
+COPY . .
+
+RUN dotnet publish /gRpc.Vs.WebApi.RestServer/gRpc.Vs.WebApi.RestServer.csproj -c Release --no-restore -o publish-build
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
+WORKDIR /publish-runtime
+
+COPY --from=build /publish-build .
+
+ENTRYPOINT ["dotnet","gRpc.Vs.WebApi.RestServer.dll"]
+
