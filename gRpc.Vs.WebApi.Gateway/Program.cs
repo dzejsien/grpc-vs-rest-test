@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.EventLog;
+using System.Diagnostics;
 
 namespace gRpc.Vs.WebApi.Gateway
 {
@@ -9,6 +10,7 @@ namespace gRpc.Vs.WebApi.Gateway
     {
         public static void Main(string[] args)
         {
+            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
             CreateHostBuilder(args).Build().Run();
         }
 
