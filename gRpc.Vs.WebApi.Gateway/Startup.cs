@@ -9,6 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using zipkin4net;
+using zipkin4net.Middleware;
+using zipkin4net.Tracers.Zipkin;
+using zipkin4net.Transport.Http;
 
 namespace gRpc.Vs.WebApi.Gateway
 {
@@ -84,7 +88,7 @@ namespace gRpc.Vs.WebApi.Gateway
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         // logger can be used only here from core 3.0 https://stackoverflow.com/questions/41287648/how-do-i-write-logs-from-within-startup-cs
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, ILoggerFactory loggerFactory)
         {
             logger.LogWarning(_urls.GrpcServer);
             logger.LogWarning(_urls.RestServer);
@@ -93,6 +97,19 @@ namespace gRpc.Vs.WebApi.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            var lifetime = app.ApplicationServices.GetService<IHostApplicationLifetime>();
+            lifetime.ApplicationStarted.Register(() => {
+                TraceManager.SamplingRate = 1.0f;
+                var logger = new TracingLogger(loggerFactory, "zipkin4net");
+                var httpSender = new HttpZipkinSender("http://localhost:9411", "application/json");
+                var tracer = new ZipkinTracer(httpSender, new JSONSpanSerializer());
+                TraceManager.RegisterTracer(tracer);
+                TraceManager.Start(logger);
+            });
+            lifetime.ApplicationStopped.Register(() => TraceManager.Stop());
+
+            app.UseTracing("gateway");
 
             //app.UseHttpsRedirection();
 
