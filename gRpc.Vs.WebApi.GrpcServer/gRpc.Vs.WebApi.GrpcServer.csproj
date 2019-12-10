@@ -11,6 +11,9 @@
 
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.23.1" />
+    <PackageReference Include="OpenTelemetry.Collector.AspNetCore" Version="0.2.0-alpha.100" />
+    <PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="0.2.0-alpha.100" />
+    <PackageReference Include="OpenTelemetry.Hosting" Version="0.2.0-alpha.100" />
   </ItemGroup>
 
   <ItemGroup>

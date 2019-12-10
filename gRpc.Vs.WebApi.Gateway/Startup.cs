@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry.Trace.Configuration;
+using OpenTelemetry.Trace.Sampler;
 using zipkin4net;
 using zipkin4net.Middleware;
 using zipkin4net.Tracers.Zipkin;
@@ -72,6 +74,17 @@ namespace gRpc.Vs.WebApi.Gateway
                 return handler;
             };
 
+            services.AddOpenTelemetry(builder =>
+            {
+                builder.SetSampler(Samplers.AlwaysSample).UseZipkin(o =>
+                    {
+                        o.ServiceName = "gateway";
+                        o.Endpoint = new System.Uri("http://localhost:9411/api/v2/spans");
+                    })
+                    // you may also configure request and dependencies collectors
+                    .AddRequestCollector();
+            });
+
             services.AddControllers();
             services.AddGrpcClient<GrpcDataService.GrpcDataServiceClient>(c =>
             {
@@ -79,9 +92,9 @@ namespace gRpc.Vs.WebApi.Gateway
             });
             //.ConfigurePrimaryHttpMessageHandler(configurePrimaryHttpMessageHandler);
 
-            services.AddHttpClient<IDataClient, DataClient>(c => { c.BaseAddress = new Uri(_urls.RestServer); })
-                //https://github.com/openzipkin/zipkin4net/issues/216
-                .AddHttpMessageHandler(_ => TracingHandler.WithoutInnerHandler("gateway"));
+            services.AddHttpClient<IDataClient, DataClient>(c => { c.BaseAddress = new Uri(_urls.RestServer); });
+            //https://github.com/openzipkin/zipkin4net/issues/216
+            //.AddHttpMessageHandler(_ => TracingHandler.WithoutInnerHandler("gateway"));
             // for diagnostics of cert - which was used etc 
             //.ConfigurePrimaryHttpMessageHandler(configurePrimaryHttpMessageHandler);
         }
@@ -98,18 +111,18 @@ namespace gRpc.Vs.WebApi.Gateway
                 app.UseDeveloperExceptionPage();
             }
 
-            var lifetime = app.ApplicationServices.GetService<IHostApplicationLifetime>();
-            lifetime.ApplicationStarted.Register(() => {
-                TraceManager.SamplingRate = 1.0f;
-                var logger = new TracingLogger(loggerFactory, "zipkin4net");
-                var httpSender = new HttpZipkinSender("http://localhost:9411", "application/json");
-                var tracer = new ZipkinTracer(httpSender, new JSONSpanSerializer());
-                TraceManager.RegisterTracer(tracer);
-                TraceManager.Start(logger);
-            });
-            lifetime.ApplicationStopped.Register(() => TraceManager.Stop());
+            //var lifetime = app.ApplicationServices.GetService<IHostApplicationLifetime>();
+            //lifetime.ApplicationStarted.Register(() => {
+            //    TraceManager.SamplingRate = 1.0f;
+            //    var logger = new TracingLogger(loggerFactory, "zipkin4net");
+            //    var httpSender = new HttpZipkinSender("http://localhost:9411", "application/json");
+            //    var tracer = new ZipkinTracer(httpSender, new JSONSpanSerializer());
+            //    TraceManager.RegisterTracer(tracer);
+            //    TraceManager.Start(logger);
+            //});
+            //lifetime.ApplicationStopped.Register(() => TraceManager.Stop());
 
-            app.UseTracing("gateway");
+            //app.UseTracing("gateway");
 
             app.UseHttpsRedirection();
 
