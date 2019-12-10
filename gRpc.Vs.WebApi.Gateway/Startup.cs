@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
+using System.Transactions;
 using gRpc.Vs.WebApi.RestClient;
 using GrpcData;
 using Microsoft.AspNetCore.Builder;
@@ -78,10 +79,9 @@ namespace gRpc.Vs.WebApi.Gateway
             });
             //.ConfigurePrimaryHttpMessageHandler(configurePrimaryHttpMessageHandler);
 
-            services.AddHttpClient<IDataClient, DataClient>(c =>
-            {
-                c.BaseAddress = new Uri(_urls.RestServer);
-            });
+            services.AddHttpClient<IDataClient, DataClient>(c => { c.BaseAddress = new Uri(_urls.RestServer); })
+                //https://github.com/openzipkin/zipkin4net/issues/216
+                .AddHttpMessageHandler(_ => TracingHandler.WithoutInnerHandler("gateway"));
             // for diagnostics of cert - which was used etc 
             //.ConfigurePrimaryHttpMessageHandler(configurePrimaryHttpMessageHandler);
         }
@@ -111,7 +111,7 @@ namespace gRpc.Vs.WebApi.Gateway
 
             app.UseTracing("gateway");
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 

@@ -10,7 +10,7 @@ namespace gRpc.Vs.WebApi.Gateway
     {
         public static void Main(string[] args)
         {
-            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
+            //Activity.DefaultIdFormat = ActivityIdFormat.W3C;
             CreateHostBuilder(args).Build().Run();
         }
 
