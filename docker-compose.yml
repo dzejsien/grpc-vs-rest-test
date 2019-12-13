@@ -9,7 +9,7 @@ services:
       - "5000:80"
       - "5001:443"
     volumes:
-      - e:/https:/https/
+      - ./certs:/https/
     environment:
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=5001
@@ -36,7 +36,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/ssl2/grpc_server.pfx
     volumes:
-      - e:/https:/https/
+      - ./certs:/https/
   grpc_zipkin:
     image: openzipkin/zipkin-slim
     ports:
