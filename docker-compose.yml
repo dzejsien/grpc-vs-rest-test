@@ -1,7 +1,7 @@
-version: '3'
+version: "3.7"
 services:
   gateway:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.gateway
     image: dzejsien/grpc/gateway
@@ -10,12 +10,34 @@ services:
       - "5001:443"
     volumes:
       - e:/https:/https/
-    environment: 
+    environment:
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=5001
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - Urls:RestServer=http://rest-server/
-    
-     
-    
+      - Urls:GrpcServer=https://grpc-server/
+  rest-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.rest-server
+    image: dzejsien/grpc/rest-server
+    ports:
+      - "5200:80"
+      #- "5201:80" - its in internal net, no need https
+  grpc-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.grpc-server
+    image: dzejsien/grpc/grpc-server
+    environment:
+      - ASPNETCORE_URLS=https://+
+      - ASPNETCORE_HTTPS_PORT=5101
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/ssl2/grpc_server.pfx
+    volumes:
+      - e:/https:/https/
+  grpc_zipkin:
+    image: openzipkin/zipkin-slim
+    ports:
+      - "9411:9411"

@@ -19,6 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gRpc.Vs.WebApi.RestClient",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{36D698E3-0150-45AC-9CC2-82B46D501005}"
 	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
 		Dockerfile.gateway = Dockerfile.gateway
 		Dockerfile.grpc-server = Dockerfile.grpc-server
 		Dockerfile.rest-server = Dockerfile.rest-server
