@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  labels:
+    app: {{ .Release.Name }}-{{ .Chart.Name }}
+    version: "{{ .Chart.AppVersion }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Chart.Name }}
+      version: "{{ .Chart.AppVersion }}"
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}
+      labels:
+        app: {{ .Release.Name }}-{{ .Chart.Name }}
+        version: "{{ .Chart.AppVersion }}"
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-{{ .Chart.Name }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: 80
+          env:
+            - name: {{ .Values.env.restServerName }}
+              value: {{ .Values.env.restServerValue }}
+            - name: {{ .Values.env.grpcServerName }}
+              value: {{ .Values.env.grpcServerValue }}

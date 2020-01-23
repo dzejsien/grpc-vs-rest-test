@@ -1,0 +1,11 @@
+ingress:
+    hosts:
+        - host:
+            domain: localhost
+            tlsSecretName: tls-secret
+            paths: 
+                - path: 
+                    value: /
+                    service: gateway
+    portHttp: 30500
+    portHttps: 30501

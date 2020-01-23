@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rest-server-depl
+  labels:
+    app: rest-server
+    version: "1.0"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rest-server
+      version: "1.0"
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      name: rest-server
+      labels:
+        app: rest-server
+        version: "1.0"
+    spec:
+      containers:
+        - name: rest-server
+          image: localhost:55000/grpc/rest-server
+          ports:
+          - containerPort: 80

@@ -1,0 +1,89 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+spec:
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+  ports:
+    - name: http
+      port: {{ .Values.ingress.portHttp }}
+      protocol: TCP
+      targetPort: http
+    - name: https
+      port: {{ .Values.ingress.portHttps }}
+      protocol: TCP
+      targetPort: https
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-ingress
+  # annotations:
+  #    kubernetes.io/ingress.class: nginx
+  annotations:
+    # Enable client certificate authentication
+    # IT SHOULD BE ENABLED, I DONT WANT TO ADD CERT TO TRUSTED FOR BROWSER
+    # Is is for client cert, so client needs to send cert also, it is not what I want
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    # Create the secret containing the trusted ca certificates
+    nginx.ingress.kubernetes.io/auth-tls-secret: "default/ca-secret"
+    # Specify the verification depth in the client certificates chain
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+    # Specify an error page to be redirected to verification errors
+    nginx.ingress.kubernetes.io/auth-tls-error-page: "http://www.wp.pl"
+    # Specify if certificates are passed to upstream server
+    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+spec:
+  tls:
+  {{- range .Values.ingress.hosts }}
+    - hosts:
+      - {{ .host.domain }}
+      # This assumes ingress-cert exists and the SSL
+      # certificate contains a CN for localhost
+      # it looks like it not working ... ehh ... check ingress controller logs - cert is not found - use default cert
+      secretName: {{ .host.tlsSecretName }} # WRONG = PS E:\https> kubectl create secret generic ingress-cert --from-file=aspnetapp.pfx = WRONG!
+  rules:
+    - host: {{ .host.domain }}
+      http:
+        paths:
+        {{- range .host.paths }}
+        - path: {{ .path.value }}
+          backend:
+            # This assumes gateway-svc exists and routes to healthy endpoints
+            serviceName: {{ $.Release.Name }}-{{ .path.service }}
+            servicePort: 80
+        {{- end -}}
+  {{- end }}
+
+
+# kind: Ingress
+# apiVersion: extensions/v1beta1
+# metadata:
+#   name: uat-ingress
+#   namespace: demo
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+# spec:
+#   rules:
+#     - host: app.uat-captn.dxc.com
+#       http:
+#       paths:
+# - path: /
+# backend:
+# serviceName: frontend-svc
+# servicePort: 80
+# - path: /api
+# backend:
+# serviceName: gateway-svc
+# servicePort: 80
+
+

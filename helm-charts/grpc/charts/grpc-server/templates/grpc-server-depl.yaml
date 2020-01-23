@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grpc-server-depl
+  labels:
+    app: grpc-server
+    version: "1.0"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: grpc-server
+      version: "1.0"
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      name: grpc-server
+      labels:
+        app: grpc-server
+        version: "1.0"
+    spec:
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: grpc-server-cert
+      containers:
+        - name: grpc-server
+          image: localhost:55000/grpc/grpc-server
+          ports:
+            - containerPort: 443
+          volumeMounts:
+            - mountPath: /etc/secret-volume
+              name: secret-volume
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+
+            - name: ASPNETCORE_HTTPS_PORT
+              value: "30601"
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+              value: "12345"
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+              value: /etc/secret-volume/certFile

@@ -1,0 +1,12 @@
+image:
+  repository: localhost:55000/grpc/gateway
+  tag: "latest"
+replicaCount: 2
+service:
+  type: ClusterIP
+  port: 80
+env:
+  restServerName: Urls__RestServer
+  restServerValue: http://rest-server-svc/
+  grpcServerName: Urls__GrpcServer
+  grpcServerValue: https://grpc-server/
