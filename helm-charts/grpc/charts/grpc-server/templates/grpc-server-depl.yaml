@@ -45,3 +45,5 @@ spec:
               value: "12345"
             - name: ASPNETCORE_Kestrel__Certificates__Default__Path
               value: /etc/secret-volume/certFile
+            - name: Urls__Zipkin
+              value: http://zipkin-svc:9411/

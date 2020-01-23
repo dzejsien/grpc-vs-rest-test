@@ -1,15 +1,15 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: rest-server-depl
+  name: zipkin-depl
   labels:
-    app: rest-server
+    app: zipkin
     version: "1.0"
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: rest-server
+      app: zipkin
       version: "1.0"
   minReadySeconds: 5
   strategy:
@@ -19,16 +19,13 @@ spec:
       maxUnavailable: 1
   template:
     metadata:
-      name: rest-server
+      name: zipkin
       labels:
-        app: rest-server
+        app: zipkin
         version: "1.0"
     spec:
       containers:
-        - name: rest-server
-          image: localhost:55000/grpc/rest-server
+        - name: zipkin
+          image: openzipkin/zipkin-slim
           ports:
-          - containerPort: 80
-          env:
-            - name: Urls__Zipkin
-              value: http://zipkin-svc:9411/
+          - containerPort: 9411

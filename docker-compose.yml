@@ -17,11 +17,14 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - Urls:RestServer=http://rest-server/
       - Urls:GrpcServer=https://grpc-server/
+      - Urls:Zipkin=http://grpc_zipkin:9411/
   rest-server:
     build:
       context: .
       dockerfile: Dockerfile.rest-server
     image: dzejsien/grpc/rest-server
+    environment:
+      - Urls:Zipkin=http://grpc_zipkin:9411/
     ports:
       - "5200:80"
       #- "5201:80" - its in internal net, no need https
@@ -35,6 +38,7 @@ services:
       - ASPNETCORE_HTTPS_PORT=5101
       - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/grpc_server.pfx
+      - Urls:Zipkin=http://grpc_zipkin:9411/
     volumes:
       - ./certs:/https/
   grpc_zipkin:

@@ -23,6 +23,7 @@ namespace gRpc.Vs.WebApi.Gateway
     {
         public string GrpcServer { get; set; }
         public string RestServer { get; set; }
+        public string Zipkin { get; set; }
     }
 
     public class Startup
@@ -79,7 +80,7 @@ namespace gRpc.Vs.WebApi.Gateway
                 builder.SetSampler(Samplers.AlwaysSample).UseZipkin(o =>
                     {
                         o.ServiceName = "gateway";
-                        o.Endpoint = new System.Uri("http://localhost:9411/api/v2/spans");
+                        o.Endpoint = new Uri($"{_urls.Zipkin}api/v2/spans");
                     })
                     // you may also configure request and dependencies collectors
                     .AddRequestCollector();
@@ -105,6 +106,7 @@ namespace gRpc.Vs.WebApi.Gateway
         {
             logger.LogWarning(_urls.GrpcServer);
             logger.LogWarning(_urls.RestServer);
+            logger.LogWarning(_urls.Zipkin);
 
             if (env.IsDevelopment())
             {

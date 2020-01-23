@@ -34,3 +34,5 @@ spec:
               value: {{ .Values.env.restServerValue }}
             - name: {{ .Values.env.grpcServerName }}
               value: {{ .Values.env.grpcServerValue }}
+            - name: Urls__Zipkin
+              value: http://zipkin-svc:9411/

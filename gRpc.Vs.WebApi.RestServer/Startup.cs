@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Trace.Configuration;
 using OpenTelemetry.Trace.Sampler;
+using System;
 using zipkin4net;
 using zipkin4net.Middleware;
 using zipkin4net.Tracers.Zipkin;
@@ -13,8 +14,15 @@ using zipkin4net.Transport.Http;
 
 namespace gRpc.Vs.WebApi.RestServer
 {
+    public class Urls
+    {
+        public string Zipkin { get; set; }
+    }
+
     public class Startup
     {
+        private readonly Urls _urls = new Urls();
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,12 +33,14 @@ namespace gRpc.Vs.WebApi.RestServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Configuration.GetSection("Urls").Bind(_urls);
+
             services.AddOpenTelemetry(builder =>
             {
                 builder.SetSampler(Samplers.AlwaysSample).UseZipkin(o =>
                     {
                         o.ServiceName = "rest-server";
-                        o.Endpoint = new System.Uri("http://localhost:9411/api/v2/spans");
+                        o.Endpoint = new Uri($"{_urls.Zipkin}api/v2/spans");
                     })
                     // you may also configure request and dependencies collectors
                     .AddRequestCollector();
