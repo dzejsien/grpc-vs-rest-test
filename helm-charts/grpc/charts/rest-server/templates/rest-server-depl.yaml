@@ -2,6 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: rest-server-depl
+  namespace: {{ .Release.Name }}-{{ .Values.global.namespace }}
   labels:
     app: rest-server
     version: "1.0"

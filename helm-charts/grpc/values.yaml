@@ -9,3 +9,7 @@ ingress:
                     service: gateway
     portHttp: 30500
     portHttps: 30501
+
+global:
+    namespace: grpc
+    linkerd: enabled

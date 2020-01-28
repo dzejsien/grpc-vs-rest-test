@@ -26,13 +26,14 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}-{{ .Chart.Name }}-ingress
+  namespace: {{ .Release.Name }}-{{ .Values.global.namespace }}
   # annotations:
   #    kubernetes.io/ingress.class: nginx
   annotations:
     # Enable client certificate authentication
     # IT SHOULD BE ENABLED, I DONT WANT TO ADD CERT TO TRUSTED FOR BROWSER
     # Is is for client cert, so client needs to send cert also, it is not what I want
-    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "off"
     # Create the secret containing the trusted ca certificates
     nginx.ingress.kubernetes.io/auth-tls-secret: "default/ca-secret"
     # Specify the verification depth in the client certificates chain
