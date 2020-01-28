@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Transactions;
+using gRpc.Vs.WebApi.Core.Consul;
 using gRpc.Vs.WebApi.RestClient;
 using GrpcData;
 using Microsoft.AspNetCore.Builder;
@@ -98,6 +99,8 @@ namespace gRpc.Vs.WebApi.Gateway
             //.AddHttpMessageHandler(_ => TracingHandler.WithoutInnerHandler("gateway"));
             // for diagnostics of cert - which was used etc 
             //.ConfigurePrimaryHttpMessageHandler(configurePrimaryHttpMessageHandler);
+            services.AddHealthChecks();
+            services.AddConsul();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,11 +129,14 @@ namespace gRpc.Vs.WebApi.Gateway
 
             //app.UseTracing("gateway");
 
-            app.UseHttpsRedirection();
+            // not sure if it is needed, on k8s its after ingress which terminates tls and gateway port is exposed as 80
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseHealthChecks("/healthz");
 
             app.UseEndpoints(endpoints =>
             {

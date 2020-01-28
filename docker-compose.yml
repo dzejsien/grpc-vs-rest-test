@@ -45,3 +45,7 @@ services:
     image: openzipkin/zipkin-slim
     ports:
       - "9411:9411"
+  grpc-consul:
+    image: consul
+    ports:
+      - "8500:8500"

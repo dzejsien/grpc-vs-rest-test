@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{36D698
 		Dockerfile.rest-server = Dockerfile.rest-server
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRpc.Vs.WebApi.Core", "gRpc.Vs.WebApi.Core\gRpc.Vs.WebApi.Core.csproj", "{127CD26D-0BD8-468B-8C80-C7024BEEE976}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{C135823C-62A5-4FF6-9BC1-09F96F2C6054}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C135823C-62A5-4FF6-9BC1-09F96F2C6054}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C135823C-62A5-4FF6-9BC1-09F96F2C6054}.Release|Any CPU.Build.0 = Release|Any CPU
+		{127CD26D-0BD8-468B-8C80-C7024BEEE976}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127CD26D-0BD8-468B-8C80-C7024BEEE976}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127CD26D-0BD8-468B-8C80-C7024BEEE976}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127CD26D-0BD8-468B-8C80-C7024BEEE976}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
