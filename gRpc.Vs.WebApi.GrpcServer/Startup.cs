@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Trace.Configuration;
 using OpenTelemetry.Trace.Sampler;
 using System;
+using gRpc.Vs.WebApi.Core.Consul;
+using Microsoft.Extensions.Options;
 
 namespace gRpc.Vs.WebApi.GrpcServer
 {
@@ -44,10 +46,13 @@ namespace gRpc.Vs.WebApi.GrpcServer
                     .AddRequestCollector();
             });
             services.AddGrpc();
+
+            services.AddHealthChecks();
+            services.AddConsul();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ConsulConfig> consulConfig)
         {
             if (env.IsDevelopment())
             {
@@ -58,6 +63,7 @@ namespace gRpc.Vs.WebApi.GrpcServer
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/healthz");
                 endpoints.MapGrpcService<DataService>();
 
                 endpoints.MapGet("/", async context =>

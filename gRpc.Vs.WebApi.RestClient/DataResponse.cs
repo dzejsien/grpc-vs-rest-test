@@ -4,6 +4,6 @@ namespace gRpc.Vs.WebApi.RestClient
 {
     public class DataResponse
     {
-        public IList<DataModel> Data { get; set; }
+        public IList<DataModel>? Data { get; set; }
     }
 }

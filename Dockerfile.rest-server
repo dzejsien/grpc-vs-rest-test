@@ -3,6 +3,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 COPY /gRpc.Vs.WebApi.RestServer/gRpc.Vs.WebApi.RestServer.csproj ./gRpc.Vs.WebApi.RestServer/gRpc.Vs.WebApi.RestServer.csproj
 COPY /gRpc.Vs.WebApi.Logic/gRpc.Vs.WebApi.Logic.csproj ./gRpc.Vs.WebApi.Logic/gRpc.Vs.WebApi.Logic.csproj
 COPY /gRpc.Vs.WebApi.RestClient/gRpc.Vs.WebApi.RestClient.csproj ./gRpc.Vs.WebApi.RestClient/gRpc.Vs.WebApi.RestClient.csproj
+COPY /gRpc.Vs.WebApi.Core/gRpc.Vs.WebApi.Core.csproj ./gRpc.Vs.WebApi.Core/gRpc.Vs.WebApi.Core.csproj
 
 RUN dotnet restore ./gRpc.Vs.WebApi.RestServer/gRpc.Vs.WebApi.RestServer.csproj
 

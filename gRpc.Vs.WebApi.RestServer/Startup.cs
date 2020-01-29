@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry.Trace.Configuration;
 using OpenTelemetry.Trace.Sampler;
 using System;
+using gRpc.Vs.WebApi.Core.Consul;
+using Microsoft.Extensions.Options;
 using zipkin4net;
 using zipkin4net.Middleware;
 using zipkin4net.Tracers.Zipkin;
@@ -48,10 +50,12 @@ namespace gRpc.Vs.WebApi.RestServer
 
             services.AddResponseCompression();
             services.AddControllers();
+            services.AddHealthChecks();
+            services.AddConsul();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IOptions<ConsulConfig> consulConfig)
         {
             if (env.IsDevelopment())
             {
@@ -77,6 +81,8 @@ namespace gRpc.Vs.WebApi.RestServer
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseHealthChecks(consulConfig.Value.HealthCheckEndpoint);
 
             app.UseEndpoints(endpoints =>
             {

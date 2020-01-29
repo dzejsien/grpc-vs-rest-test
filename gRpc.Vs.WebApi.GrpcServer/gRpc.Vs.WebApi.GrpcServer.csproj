@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\gRpc.Vs.WebApi.Core\gRpc.Vs.WebApi.Core.csproj" />
     <ProjectReference Include="..\gRpc.Vs.WebApi.Logic\gRpc.Vs.WebApi.Logic.csproj" />
   </ItemGroup>
 
