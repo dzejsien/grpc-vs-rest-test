@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using Grpc.Health.V1;
+using Grpc.Net.Client;
 using gRpc.Vs.WebApi.Logic;
 
 namespace gRpc.Vs.WebApi.Host
@@ -37,10 +40,27 @@ namespace gRpc.Vs.WebApi.Host
        | AsyncDeserialize | 26.67 ms | 0.4331 ms | 0.4051 ms |    1 |  687.5000 | 281.2500 |        - |   3.24 KB |
      */
 
+    class Program2
+    {
+        static async Task Main()
+        {
+            using var channel = GrpcChannel.ForAddress("https://localhost:5101");
+
+            var healthClient = new Health.HealthClient(channel);
+
+            var health = await healthClient.CheckAsync(new HealthCheckRequest());
+
+            Console.WriteLine($"Health Status: {health.Status}");
+
+            Console.WriteLine("Press a key to exit");
+            Console.ReadKey();
+        }
+    }
+
     class Program
     {
-        static void Main()
-        { 
+        static void Main2()
+        {
             BenchmarkRunner.Run<TestJsonDeserialization>();
         }
     }

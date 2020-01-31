@@ -8,8 +8,11 @@ using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Trace.Configuration;
 using OpenTelemetry.Trace.Sampler;
 using System;
+using Grpc.HealthCheck;
 using gRpc.Vs.WebApi.Core.Consul;
+using gRpc.Vs.WebApi.Core.HealthChecks.Grpc;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace gRpc.Vs.WebApi.GrpcServer
 {
@@ -46,8 +49,9 @@ namespace gRpc.Vs.WebApi.GrpcServer
                     .AddRequestCollector();
             });
             services.AddGrpc();
-
-            services.AddHealthChecks();
+            services.AddGrpcHealthChecks();
+            // it is added in above ext method
+            // services.AddHealthChecks();
             services.AddConsul();
         }
 
@@ -63,8 +67,11 @@ namespace gRpc.Vs.WebApi.GrpcServer
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecks("/healthz");
+                //endpoints.MapHealthChecks("/healthz");
                 endpoints.MapGrpcService<DataService>();
+                // grpc healthcheck endpoint https://github.com/grpc/grpc/blob/master/doc/health-checking.md
+                // https://github.com/grpc/grpc/blob/master/src/proto/grpc/health/v1/health.proto
+                endpoints.MapGrpcService<HealthServiceImpl>();
 
                 endpoints.MapGet("/", async context =>
                 {

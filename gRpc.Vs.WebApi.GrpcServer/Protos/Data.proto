@@ -5,6 +5,7 @@ option csharp_namespace = "GrpcData";
 service GrpcDataService {
 	rpc GetData (GetDataRequest) returns (DataResponse);
 	rpc GetDataStream (GetDataRequest) returns (stream DataResponse);
+	//rpc Healthz () returns ();
 }
 
 message GetDataRequest {

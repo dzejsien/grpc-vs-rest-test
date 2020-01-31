@@ -31,6 +31,8 @@ namespace gRpc.Vs.WebApi.Gateway
     public class Startup
     {
         private readonly Urls _urls = new Urls();
+        private readonly ServiceDiscoveryConfig _sdConfig = new ServiceDiscoveryConfig();
+        private const string ServiceDiscoverySection = "serviceDiscovery";
 
         public Startup(IConfiguration configuration)
         {
@@ -42,7 +44,9 @@ namespace gRpc.Vs.WebApi.Gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.Configure<ServiceDiscoveryConfig>(Configuration.GetSection(ServiceDiscoverySection));
             Configuration.GetSection("Urls").Bind(_urls);
+            Configuration.GetSection(ServiceDiscoverySection).Bind(_sdConfig);
 
             Func<HttpClientHandler> configurePrimaryHttpMessageHandler = () =>
             {
@@ -77,6 +81,8 @@ namespace gRpc.Vs.WebApi.Gateway
                 return handler;
             };
 
+            services.AddConsul();
+
             services.AddOpenTelemetry(builder =>
             {
                 builder.SetSampler(Samplers.AlwaysSample).UseZipkin(o =>
@@ -89,6 +95,10 @@ namespace gRpc.Vs.WebApi.Gateway
             });
 
             services.AddControllers();
+
+            // its stupid, but we can't use consul here, its not yet initialized.
+            // in order to make this work correctly we should create own impl of Clients
+
             services.AddGrpcClient<GrpcDataService.GrpcDataServiceClient>(c =>
             {
                 c.Address = new Uri(_urls.GrpcServer);
@@ -101,7 +111,6 @@ namespace gRpc.Vs.WebApi.Gateway
             // for diagnostics of cert - which was used etc 
             //.ConfigurePrimaryHttpMessageHandler(configurePrimaryHttpMessageHandler);
             services.AddHealthChecks();
-            services.AddConsul();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
